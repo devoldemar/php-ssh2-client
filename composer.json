@@ -1,0 +1,22 @@
+{
+    "name": "devoldemar/php-ssh2-client",
+    "description": "Object-oriented implementation of common SSH / SFTP operations based on ssh2 library",
+    "authors": [{
+        "name": "vladimir.vyatkin",
+        "email": "voldemarpro@hotmail.com"
+    }],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "php": ">=5.4",
+        "ext-ssh2": "*"
+    },
+    "require-dev": {
+
+    },
+    "autoload": {
+        "psr-4": {
+            "Devoldemar\\": "src/"
+        }
+    }
+}
