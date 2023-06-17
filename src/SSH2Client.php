@@ -1,4 +1,7 @@
 <?php
+/**
+ * @copyright Vladimir Vyatkin
+ */
 
 namespace Devoldemar;
 

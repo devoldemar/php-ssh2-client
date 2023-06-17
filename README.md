@@ -162,3 +162,6 @@ Directory removal recursively with maximum depth = $depth:
 ```
 $ssh2->removeDir(string $dir, ?int $depth = 10): bool
 ```
+
+## License
+MIT 
