@@ -1,10 +1,14 @@
-# SSH2 / SFTP client
-Simple client which implements solutions for typical SSH and SFTP operations. Supports custom logger and terminal settings per instance in order to be easily integrated to existing application. Based on php-ssh2 library and compatible with all its versions starting from 0.9.0. For that purpose it contains possible workarounds for previously known bugs.
+# SSH2 / SFTP client for PHP application
+Single-class wrapper and solution for typical tasks over SSH and SFTP connection. It supports custom logger and terminal settings per instance in order to be easily integrated to an existing application (Yii, Laravel, Symphony, etc). The project is based on php-ssh2 library and compatible with all its versions starting from 0.9.0. For that purpose it takes into account reported bugs and peculiarities of usage.
 
-On Linux php-ssh2 library can be installed from system repository, or as a PECL package, or manually, see https://www.php.net/manual/en/ssh2.installation.php
+On Linux php-ssh2 library can be easily installed from software repository, or as a PECL package, or manually, see https://www.php.net/manual/en/ssh2.installation.php
 
 ## Requirements
   * PHP 5.4+ with ssh2 extension installed
+  * PHPUnit framework for tests, version 8.5.33 (PHP 7.2+)
+
+## Testing
+Tested to work with PHP 5.6, 7.2, 7.4 and 8.1. Built-in test case under `tests` directory requires PHP 7.2+. Compatibility with PHP 5.4-5.6 (and corresponding version of PHPUnit) can be reached after just removal of return type declarations. 
 
 ## Installation via composer
 Add the repo information in your composer.json:
@@ -102,7 +106,7 @@ Get command shell as I/O stream
 ```
 $ssh2->getShell(): resource|false
 ```
-Hook manner, should be the way when calling getShell() results in segmentation fault. I/O stream is set to be non-blocking. EOF usually means connection or session abort.
+Hook manner, should be the way when calling getShell() results in error. I/O stream is set to be non-blocking. EOF usually means connection or session abort.
 ```
 $rw = $ssh2->useShell();
 if ($rw !== false) {

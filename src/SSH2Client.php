@@ -22,12 +22,12 @@ class SSH2Client {
     public function __construct($host, $port = 22)
     {
         if (!function_exists('ssh2_connect')) {
-            throw new Exception('ssh2 extension not installed');
+            throw new \Exception('ssh2 extension not installed');
         }
         $this->_address = "$host:$port";
         $this->_conn = ssh2_connect($host, $port, array('hostkey'=>'ssh-rsa'));
         if (!$this->_conn) {
-            throw new Exception('ssh2_connect failed, server=' . $this->_address);
+            throw new \Exception('ssh2_connect failed, server=' . $this->_address);
         } else {
             $this->log(__METHOD__, 'connected to ssh2 server ' . $this->_address, false);
         }

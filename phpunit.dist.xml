@@ -1,0 +1,17 @@
+<phpunit>
+	<php>
+		<var name="sshHost" value="" />
+		<var name="sshHostMD5Key" value="" />
+		<var name="sshPort" value="22" />
+		<var name="sshUser" value="" />
+		<var name="sshPassword" value="" />
+		<var name="sshPublicKeyFile" value="" />
+		<var name="sshPrivateKeyFile" value="" />
+		<var name="sshKeyPassword" value="" />
+		<var name="sshAuthHost" value="" />
+		<var name="sshAuthHostPublicKeyFile" value="" />
+		<var name="sshAuthHostPrivateKeyFile" value="" />
+		<var name="sshAuthHostKeyPassword" value="" />
+		<var name="sshAuthHostUser" value="" />
+	</php>
+</phpunit>
