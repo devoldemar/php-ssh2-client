@@ -28,10 +28,11 @@ composer require devoldemar/php-ssh2-client:master
 ## Usage
 
 ### Connection
-Throws an exception on failure:
 ```
 $ssh2 = new \Devoldemar\SSH2Client($host, $port = 22);
 ```
+Constructor throws an exception on failure.
+
 
 Check the connection is alive:
 ```
@@ -46,6 +47,7 @@ if (!strcasecmp($ssh2->fingerprint(), $knownValue))) {
     // do smth
 }
 ```
+The host key to be returned as fingerprint can be one of several keys created on server. Priority depends on encryption algorithm, openssh library uses the following order: ECDSA, Ed25519, RSA.
 
 Close connection:
 ```
@@ -138,12 +140,12 @@ $ssh2->getShell();
 ```
 
 ### SFTP operations
-All methods except `renameFile` allow path to a corresponding file or a directory to be relative one and start from references sush as `./` and `../`.
+All methods except `renameFile` allow path to a corresponding file or a directory to be relative one and start from aliases sush as `./` and `../`.
 
-Outputs same array as lstat(), but adds "is_link" and "is_dir" flags to indicate file type explicitly:
 ```
 $ssh2->getFileStat(string $file): array|false
 ```
+Method returns same array as lstat(), but adds "is_link" and "is_dir" flags to indicate file type explicitly.
 
 Reading or writing file data, optionally by chunks, with contents or number of processed bytes in return value:
 ```
@@ -159,10 +161,15 @@ $ssh2->chmodFile(string $file, int $mode): bool
 $ssh2->getRealPath(string $path): string|false
 $ssh2->makeLink(string $target, string $link): bool
 $ssh2->readLink(string $link): string|false
-$ssh2->makeDir(string $path, ?int $mode = 0775): bool
 $ssh2->listFiles(string $dir, ?$stat = false): array|false
 ```
-Directory removal recursively with maximum depth = $depth:
+Make a directory:
+```
+$ssh2->makeDir(string $path, ?int $mode = 0775): bool
+```
+Method also works as `mkdir -p` (make absent parent directories as needed).
+
+Remove a directory recursively with maximum depth = $depth:
 ```
 $ssh2->removeDir(string $dir, ?int $depth = 10): bool
 ```

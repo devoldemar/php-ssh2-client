@@ -270,9 +270,9 @@ final class SSH2ClientTest extends TestCase
      */
     public function testMakeDir()
     {
-        $mkdir = $this->ssh2->makeDir('testdir');
+        $mkdir = $this->ssh2->makeDir('./testdir/00');
         $this->assertTrue($mkdir);
-        $stat = $this->ssh2->getFileStat('testdir');
+        $stat = $this->ssh2->getFileStat('./testdir/00');
         $this->assertIsArray($stat);
     }
 

@@ -25,7 +25,7 @@ class SSH2Client {
             throw new \Exception('ssh2 extension not installed');
         }
         $this->_address = "$host:$port";
-        $this->_conn = ssh2_connect($host, $port, array('hostkey'=>'ssh-rsa'));
+        $this->_conn = ssh2_connect($host, $port);
         if (!$this->_conn) {
             throw new \Exception('ssh2_connect failed, server=' . $this->_address);
         } else {
@@ -566,8 +566,19 @@ class SSH2Client {
         if ($this->_conn) {
             $_sftp = ssh2_sftp($this->_conn);
             if ($_sftp) {
-                if ($path[0] === '.') {
-                    $path = ssh2_sftp_realpath($_sftp, $path);
+                $maindir = basename($path);
+                $basedir = $path[0] === '/' ? '/' : '';
+                foreach (explode('/', $path) as $dir) {
+                    $basedir .= $dir;
+                    if ($dir !== '' && $dir !== '.' && $dir !== '..' && $dir !== $maindir) {
+                        $stat = @ssh2_sftp_stat($_sftp, $basedir);
+                        if ($stat === false) {
+                            if (!ssh2_sftp_mkdir($_sftp, $basedir, $mode)) {
+                                return false;
+                            }
+                        }
+                    }
+                    $basedir .= '/';
                 }
                 return ssh2_sftp_mkdir($_sftp, $path, $mode);
             }
