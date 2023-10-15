@@ -84,6 +84,7 @@ class SSH2Client extends \Devoldemar\SSH2Client
 ### Authentication
 ```
 $ssh2->authByPassword($username, $password): bool
+$ssh2->authByKey($username, $publicKey, $privateKey, ?$passphrase = ''): bool
 $ssh2->authByKeyFile($username, $publicKeyFile, $privateKeyFile, ?$passphrase = ''): bool
 $ssh2->authByHost($username, $hostname, $publicKeyFile, $privateKeyFile, ?$passphrase = '', ?$husername = $username): bool
 ```

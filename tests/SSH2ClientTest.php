@@ -62,6 +62,14 @@ final class SSH2ClientTest extends TestCase
         return $this->ssh2->authByKeyFile($this->sshUser, $this->sshPublicKeyFile, $this->sshPrivateKeyFile, $this->sshKeyPassword);
     }
 
+    protected function authByKey()
+    {
+        if (!$this->sshUser || !$this->sshPublicKeyFile || !$this->sshPrivateKeyFile) {
+            return null;
+        }
+        return $this->ssh2->authByKey($this->sshUser, file_get_contents($this->sshPublicKeyFile), file_get_contents($this->sshPrivateKeyFile), $this->sshKeyPassword);
+    }
+
     protected function authByHost()
     {
         if (!$this->sshUser || !$this->sshAuthHost || !$this->sshAuthHostPublicKeyFile || !$this->sshAuthHostPrivateKeyFile) {
@@ -103,6 +111,15 @@ final class SSH2ClientTest extends TestCase
     public function testAuthByKeyFile()
     {
         $auth = $this->authByKeyFile();
+        if ($auth === null) {
+            $this->markTestSkipped('Authentication requires configured username and keypair');
+        }
+        $this->assertTrue($auth);
+    }
+
+    public function testAuthByKey()
+    {
+        $auth = $this->authByKey();
         if ($auth === null) {
             $this->markTestSkipped('Authentication requires configured username and keypair');
         }

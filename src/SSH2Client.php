@@ -162,16 +162,48 @@ class SSH2Client {
     /**
      * Authenticates client by username and keypair.
      *
-     * @param string $username       Username of remote server (connected to)
+     * @param string $username       Username on remote server (connected to)
      * @param string $publicKeyFile  Path to public key file
      * @param string $privateKeyFile Path to private key file
-     * @param string $passphrase     Optional passphrase, if private key is protected by that
+     * @param string $passphrase     Optional passphrase for private key
      * @return bool Authentication status.
      */
     public function authByKeyFile($username, $publicKeyFile, $privateKeyFile, $passphrase = '')
     {
         if ($this->_conn) {
             $this->_auth = ssh2_auth_pubkey_file($this->_conn, $username, $publicKeyFile, $privateKeyFile, $passphrase);
+            return $this->onAuth('public key file', $username);
+        }
+        $this->disconnect();
+    }
+
+    /**
+     * Authenticates client by username and keypair.
+     *
+     * @param string $username     Username on remote server (connected to)
+     * @param string $publicKey    Public key
+     * @param string $privateKey   Private key
+     * @param string $passphrase   Optional passphrase for private key
+     * @return bool Authentication status.
+     */
+    public function authByKey($username, $publicKey, $privateKey, $passphrase = '')
+    {
+        if ($this->_conn) {
+            if (!function_exists('ssh2_auth_pubkey')) {
+                $fpub = tmpfile();
+                $meta = stream_get_meta_data($fpub);
+                $publicKeyFile = $meta['uri'];
+                $fprv = tmpfile();
+                $meta = stream_get_meta_data($fprv);
+                $privateKeyFile = $meta['uri'];
+                fwrite($fpub, $publicKey, strlen($publicKey));
+                fwrite($fprv, $privateKey, strlen($privateKey));
+                $this->_auth = ssh2_auth_pubkey_file($this->_conn, $username, $publicKeyFile, $privateKeyFile, $passphrase);
+                fclose($fpub);
+                fclose($fprv);
+            } else {
+                $this->_auth = ssh2_auth_pubkey($this->_conn, $username, $publicKey, $privateKey, $passphrase);
+            }
             return $this->onAuth('public key', $username);
         }
         $this->disconnect();
@@ -180,7 +212,7 @@ class SSH2Client {
     /**
      * Authenticates client on host identified by hostname, providing username and keypair of trusted server.
      *
-     * @param string $username       Username for the server connected to
+     * @param string $username       Username on remote server (connected to)
      * @param string $hostname       IP address or domain of trusted server
      * @param string $publicKeyFile  Path to host public key file
      * @param string $privateKeyFile Path to host private key file
